@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Mi Emprendimiento</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --negro: #3a3a40;
+    --negro-card: #45454c;
+    --negro-input: #50505a;
+    --rosa-fuerte: #ec6fa8;
+    --rosa-medio: #f48fbb;
+    --rosa-suave: #f8b4d0;
+    --rosa-palo: #fce4ec;
+    --blanco: #ffffff;
+    --gris-texto: #e0e0e2;
+    --gris-claro: #b0b0b8;
+    --verde-ganancia: #7fcb83;
+    --amarillo: #ffd96b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--negro);
+    color: var(--blanco);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === FONDO MICKEY === */
+  .mickey-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .mickey-bg svg {
+    position: absolute;
+    opacity: 0.045;
+  }
+
+  /* === LAYOUT === */
+  .app-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* === HEADER === */
+  header {
+    text-align: center;
+    padding: 36px 0 20px;
+  }
+
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--rosa-fuerte), var(--rosa-suave));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--gris-claro);
+    font-size: 0.88rem;
+    margin-top: 4px;
+  }
+
+  /* === TABS === */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin: 28px 0 24px;
+    background: var(--negro-card);
+    border-radius: 14px;
+    padding: 6px;
+    border: 1px solid #5a5a62;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 12px 10px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--gris-claro);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--rosa-fuerte), #e0589a);
+    color: var(--blanco);
+    box-shadow: 0 4px 16px rgba(236,111,168,0.4);
+  }
+
+  .tab-btn:not(.active):hover {
+    background: #55555d;
+    color: var(--rosa-suave);
+  }
+
+  /* === PANELS === */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* === CARDS === */
+  .card {
+    background: var(--negro-card);
+    border: 1px solid #5a5a62;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--rosa-suave);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title span.icon {
+    background: linear-gradient(135deg, var(--rosa-fuerte), #e0589a);
+    border-radius: 8px;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  /* === TABLA INSUMOS === */
+  .table-wrapper { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #4f4f57;
+    color: var(--rosa-suave);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  thead th:first-child { border-radius: 8px 0 0 8px; }
+  thead th:last-child { border-radius: 0 8px 8px 0; }
+
+  tbody tr {
+    border-bottom: 1px solid #4f4f57;
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: #4f4f57; }
+
+  tbody td {
+    padding: 10px 12px;
+    color: var(--gris-texto);
+  }
+
+  tbody td input {
+    background: transparent;
+    border: none;
+    color: var(--blanco);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    width: 100%;
+    outline: none;
+  }
+
+  tbody td input:focus {
+    color: var(--rosa-suave);
+  }
+
+  td.precio-total {
+    color: var(--rosa-fuerte);
+    font-weight: 600;
+  }
+
+  .btn-eliminar {
+    background: none;
+    border: none;
+    color: #8a8a92;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+    padding: 2px 6px;
+  }
+
+  .btn-eliminar:hover { color: var(--rosa-fuerte); }
+
+  /* === BOTONES === */
+  .btn-add {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1.5px dashed #444;
+    color: var(--gris-claro);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+  }
+
+  .btn-add:hover {
+    border-color: var(--rosa-fuerte);
+    color: var(--rosa-fuerte);
+    background: rgba(236,111,168,0.05);
+  }
+
+  /* === INPUTS INDIVIDUALES === */
+  .field-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .field-group label {
+    font-size: 0.82rem;
+    color: var(--gris-claro);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .field-group input {
+    background: var(--negro-input);
+    border: 1px solid #5e5e66;
+    border-radius: 8px;
+    padding: 9px 14px;
+    color: var(--blanco);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field-group input:focus {
+    border-color: var(--rosa-fuerte);
+    box-shadow: 0 0 0 3px rgba(236,111,168,0.12);
+  }
+
+  .total-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #5a5a62;
+  }
+
+  .total-label {
+    font-size: 0.82rem;
+    color: var(--gris-claro);
+  }
+
+  .total-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--rosa-fuerte);
+  }
+
+  /* === PRODUCTOS PRODUCIDOS === */
+  .prod-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .prod-card {
+    background: #4f4f57;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .prod-card:hover { border-color: var(--rosa-fuerte); }
+
+  .prod-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .prod-card input[type="text"] {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #444;
+    color: var(--blanco);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    width: 100%;
+    outline: none;
+    padding-bottom: 4px;
+    transition: border-color 0.2s;
+  }
+
+  .prod-card input[type="text"]:focus { border-color: var(--rosa-fuerte); }
+
+  .prod-card-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .mini-field label {
+    font-size: 0.72rem;
+    color: var(--gris-claro);
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .mini-field input {
+    background: var(--negro-input);
+    border: 1px solid #5e5e66;
+    border-radius: 6px;
+    padding: 7px 10px;
+    color: var(--blanco);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .mini-field input:focus { border-color: var(--rosa-fuerte); }
+
+  /* === INSUMOS USADOS POR PRODUCTO === */
+  .insumos-usados {
+    margin-top: 14px;
+    border-top: 1px solid #5a5a62;
+    padding-top: 12px;
+  }
+
+  .insumos-usados-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .insumos-usados-header span {
+    font-size: 0.72rem;
+    color: var(--gris-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 600;
+  }
+
+  .btn-add-insumo-uso {
+    background: none;
+    border: 1px dashed #6a6a72;
+    color: var(--gris-claro);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 0.72rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-add-insumo-uso:hover {
+    border-color: var(--rosa-fuerte);
+    color: var(--rosa-fuerte);
+  }
+
+  .insumo-uso-row {
+    display: grid;
+    grid-template-columns: 1fr 70px 22px;
+    gap: 6px;
+    margin-bottom: 6px;
+    align-items: center;
+  }
+
+  .insumo-uso-row select {
+    background: var(--negro-input);
+    border: 1px solid #5e5e66;
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: var(--blanco);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    outline: none;
+    width: 100%;
+  }
+
+  .insumo-uso-row input {
+    background: var(--negro-input);
+    border: 1px solid #5e5e66;
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: var(--blanco);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    outline: none;
+    width: 100%;
+    text-align: center;
+  }
+
+  .insumo-uso-row select:focus,
+  .insumo-uso-row input:focus { border-color: var(--rosa-fuerte); }
+
+  .btn-quitar-uso {
+    background: none;
+    border: none;
+    color: #8a8a92;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+
+  .btn-quitar-uso:hover { color: var(--rosa-fuerte); }
+
+  .costo-insumos-linea {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.76rem;
+    color: var(--gris-claro);
+    margin-top: 6px;
+  }
+
+  .costo-insumos-linea strong { color: var(--rosa-suave); }
+
+  .sin-insumos-msg {
+    font-size: 0.74rem;
+    color: #8a8a92;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+
+  .precio-sugerido {
+    margin-top: 12px;
+    background: rgba(236,111,168,0.08);
+    border: 1px solid rgba(236,111,168,0.2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .precio-sugerido span {
+    font-size: 0.78rem;
+    color: var(--rosa-suave);
+    font-weight: 500;
+  }
+
+  .precio-sugerido strong {
+    font-size: 1rem;
+    color: var(--rosa-fuerte);
+    font-weight: 700;
+  }
+
+  /* === RESUMEN PANEL === */
+  .resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--negro-card);
+    border: 1px solid #5a5a62;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--rosa-fuerte);
+  }
+
+  .stat-card .stat-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .stat-card .stat-label {
+    font-size: 0.75rem;
+    color: var(--gris-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .stat-card .stat-val {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--rosa-fuerte);
+    line-height: 1.1;
+  }
+
+  .stat-card.verde .stat-val { color: var(--verde-ganancia); }
+  .stat-card.amarillo .stat-val { color: var(--amarillo); }
+  .stat-card.rosa .stat-val { color: var(--rosa-suave); }
+
+  /* === STOCK TABLE === */
+  .stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .stock-table thead th {
+    text-align: left;
+    padding: 10px 14px;
+    background: #4f4f57;
+    color: var(--rosa-suave);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stock-table thead th:first-child { border-radius: 8px 0 0 8px; }
+  .stock-table thead th:last-child { border-radius: 0 8px 8px 0; }
+
+  .stock-table tbody tr {
+    border-bottom: 1px solid #4f4f57;
+  }
+
+  .stock-table tbody td {
+    padding: 12px 14px;
+    color: var(--gris-texto);
+  }
+
+  .stock-table tbody td:first-child { font-weight: 600; color: var(--blanco); }
+
+  .badge-stock {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .badge-stock.ok { background: rgba(102,187,106,0.15); color: var(--verde-ganancia); }
+  .badge-stock.low { background: rgba(255,213,79,0.15); color: var(--amarillo); }
+  .badge-stock.out { background: rgba(236,111,168,0.15); color: var(--rosa-fuerte); }
+
+  .btn-vender {
+    background: linear-gradient(135deg, var(--rosa-fuerte), #e0589a);
+    border: none;
+    color: white;
+    border-radius: 7px;
+    padding: 6px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .btn-vender:hover { opacity: 0.85; transform: scale(1.03); }
+  .btn-vender:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  /* === GANANCIA BREAKDOWN === */
+  .ganancia-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .breakdown-card {
+    background: #4f4f57;
+    border-radius: 12px;
+    padding: 18px;
+    border-left: 3px solid var(--rosa-fuerte);
+  }
+
+  .breakdown-card.sugerida { border-left-color: var(--verde-ganancia); }
+
+  .breakdown-card h4 {
+    font-size: 0.78rem;
+    color: var(--gris-claro);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .breakdown-card .big-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--rosa-fuerte);
+  }
+
+  .breakdown-card.sugerida .big-num { color: var(--verde-ganancia); }
+
+  .breakdown-card .sub {
+    font-size: 0.78rem;
+    color: var(--gris-claro);
+    margin-top: 4px;
+  }
+
+  /* === EMPTY STATE === */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gris-claro);
+    font-size: 0.88rem;
+  }
+
+  .empty-state .emoji { font-size: 2.5rem; margin-bottom: 10px; }
+
+  /* === TOAST === */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, var(--rosa-fuerte), #e0589a);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(236,111,168,0.4);
+    z-index: 999;
+    animation: slideIn 0.3s ease;
+    display: none;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* === SEPARADOR === */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rosa-fuerte), transparent);
+    margin: 28px 0;
+    opacity: 0.3;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 640px) {
+    header h1 { font-size: 1.6rem; }
+    .ganancia-breakdown { grid-template-columns: 1fr; }
+    .tabs { flex-direction: column; }
+    .tab-btn { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- FONDO MICKEY -->
+<div class="mickey-bg" id="mickeyBg"></div>
+
+<div class="app-wrapper">
+
+  <header>
+    <h1>✨ Mi Emprendimiento</h1>
+    <p>Gestión de insumos, productos y ventas</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn" onclick="switchTab('resumen')">📊 Resumen</button>
+    <button class="tab-btn active" onclick="switchTab('produccion')">🛍️ Insumos & Producción</button>
+  </div>
+
+  <!-- ===== TAB: PRODUCCIÓN ===== -->
+  <div class="tab-panel active" id="panel-produccion">
+
+    <!-- INSUMOS -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">🛒</span>
+        Insumos comprados
+      </div>
+      <div class="table-wrapper">
+        <table id="tabla-insumos">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio unitario</th>
+              <th>Precio total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="insumos-body">
+          </tbody>
+        </table>
+      </div>
+      <button class="btn-add" onclick="agregarInsumo()">＋ Agregar insumo</button>
+
+      <div class="total-row">
+        <span class="total-label">Total insumos:</span>
+        <span class="total-value" id="total-insumos">$0.00</span>
+      </div>
+
+      <div class="field-group" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #5a5a62;">
+        <label>💪 Mano de obra estimada:</label>
+        <input type="number" id="mano-obra" placeholder="$0.00" min="0" oninput="actualizarTodo()" />
+      </div>
+
+      <div class="total-row" style="margin-top: 10px;">
+        <span class="total-label">Inversión total (insumos + MO):</span>
+        <span class="total-value" id="inversion-total">$0.00</span>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- PRODUCTOS PRODUCIDOS -->
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">🎀</span>
+        Productos realizados
+      </div>
+
+      <div class="field-group" style="margin-bottom: 16px;">
+        <label>📈 Ganancia objetivo (%):</label>
+        <input type="number" id="ganancia-pct" placeholder="ej: 30" min="0" max="999" value="30" oninput="actualizarTodo()" style="width:120px;" />
+        <span style="font-size:0.8rem; color: var(--gris-claro);">para el precio sugerido</span>
+      </div>
+
+      <div class="prod-grid" id="prod-grid">
+      </div>
+      <button class="btn-add" style="margin-top: 16px;" onclick="agregarProducto()">＋ Agregar producto</button>
+    </div>
+
+  </div>
+
+  <!-- ===== TAB: RESUMEN ===== -->
+  <div class="tab-panel" id="panel-resumen">
+
+    <div class="resumen-grid" id="resumen-stats">
+      <!-- generado por JS -->
+    </div>
+
+    <div class="ganancia-breakdown">
+      <div class="breakdown-card">
+        <h4>💰 Ganancia estimada (precio manual)</h4>
+        <div class="big-num" id="ganancia-manual">$0.00</div>
+        <div class="sub" id="ganancia-manual-sub">Basada en los precios que pusiste</div>
+      </div>
+      <div class="breakdown-card sugerida">
+        <h4>✨ Ganancia estimada (precio sugerido)</h4>
+        <div class="big-num" id="ganancia-sugerida">$0.00</div>
+        <div class="sub" id="ganancia-sugerida-sub">Basada en el % objetivo configurado</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="icon">📦</span>
+        Stock actual
+      </div>
+
+      <div class="table-wrapper">
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>En stock</th>
+              <th>Vendidos</th>
+              <th>Precio manual</th>
+              <th>Precio sugerido</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="stock-body">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" id="stock-empty" style="display:none;">
+        <div class="emoji">🎀</div>
+        <div>Todavía no cargaste productos.<br>Andá a la pestaña <strong>Insumos & Producción</strong> para empezar.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  ESTADO
+// ============================================================
+let insumos = [];
+let productos = [];
+let insumoCnt = 0;
+let productoCnt = 0;
+
+// ============================================================
+//  FONDO MICKEY
+// ============================================================
+function generarMickeyBg() {
+  const bg = document.getElementById('mickeyBg');
+  const cols = Math.ceil(window.innerWidth / 110) + 1;
+  const rows = Math.ceil(window.innerHeight / 110) + 3;
+
+  let svgs = '';
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = c * 110 + (r % 2 === 0 ? 0 : 55);
+      const y = r * 90;
+      const scale = 0.7 + Math.random() * 0.5;
+      const rot = (Math.random() - 0.5) * 30;
+      svgs += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 55"
+        style="left:${x}px; top:${y}px; width:${50*scale}px; height:${50*scale}px;
+        transform: rotate(${rot}deg);">
+        <!-- orejas -->
+        <circle cx="14" cy="14" r="14" fill="#e91e8c"/>
+        <circle cx="46" cy="14" r="14" fill="#e91e8c"/>
+        <!-- cabeza -->
+        <circle cx="30" cy="34" r="20" fill="#e91e8c"/>
+      </svg>`;
+    }
+  }
+  bg.innerHTML = svgs;
+}
+
+generarMickeyBg();
+
+// ============================================================
+//  TABS
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'resumen') renderResumen();
+}
+
+// ============================================================
+//  INSUMOS
+// ============================================================
+function agregarInsumo() {
+  const id = ++insumoCnt;
+  insumos.push({ id, producto: '', cantidad: 0, precioUnit: 0 });
+  renderInsumos();
+}
+
+function renderInsumos() {
+  const tbody = document.getElementById('insumos-body');
+  tbody.innerHTML = '';
+  insumos.forEach(ins => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" placeholder="Nombre del insumo" value="${ins.producto}"
+        oninput="updateInsumo(${ins.id}, 'producto', this.value)" /></td>
+      <td><input type="number" placeholder="0" min="0" value="${ins.cantidad || ''}"
+        oninput="updateInsumo(${ins.id}, 'cantidad', this.value)" style="width:70px;" /></td>
+      <td><input type="number" placeholder="0.00" min="0" step="0.01" value="${ins.precioUnit || ''}"
+        oninput="updateInsumo(${ins.id}, 'precioUnit', this.value)" style="width:100px;" /></td>
+      <td class="precio-total">$${(ins.cantidad * ins.precioUnit).toFixed(2)}</td>
+      <td><button class="btn-eliminar" onclick="eliminarInsumo(${ins.id})">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+  actualizarTotalesInsumos();
+}
+
+function updateInsumo(id, campo, valor) {
+  const ins = insumos.find(i => i.id === id);
+  if (!ins) return;
+  ins[campo] = campo === 'producto' ? valor : parseFloat(valor) || 0;
+  const tr = document.getElementById('insumos-body').querySelectorAll('tr')[insumos.indexOf(ins)];
+  if (tr) tr.querySelectorAll('.precio-total')[0].textContent = `$${(ins.cantidad * ins.precioUnit).toFixed(2)}`;
+  actualizarTotalesInsumos();
+  if (campo === 'producto') {
+    // el nombre cambió: hay que refrescar los selects de insumos usados en cada producto
+    productos.forEach(p => refrescarTarjetaProducto(p));
+  }
+}
+
+function eliminarInsumo(id) {
+  insumos = insumos.filter(i => i.id !== id);
+  // quitar referencias a este insumo en los productos que lo usaban
+  productos.forEach(p => {
+    p.insumosUsados = p.insumosUsados.filter(u => u.insumoId !== id);
+  });
+  renderInsumos();
+  renderProductos();
+}
+
+function getTotalInsumos() {
+  return insumos.reduce((s, i) => s + i.cantidad * i.precioUnit, 0);
+}
+
+function getManoObra() {
+  return parseFloat(document.getElementById('mano-obra').value) || 0;
+}
+
+function getInversionTotal() {
+  return getTotalInsumos() + getManoObra();
+}
+
+function actualizarTotalesInsumos() {
+  document.getElementById('total-insumos').textContent = `$${getTotalInsumos().toFixed(2)}`;
+  document.getElementById('inversion-total').textContent = `$${getInversionTotal().toFixed(2)}`;
+  actualizarSugeridos();
+}
+
+function actualizarTodo() {
+  actualizarTotalesInsumos();
+}
+
+// ============================================================
+//  PRODUCTOS
+// ============================================================
+function agregarProducto() {
+  const id = ++productoCnt;
+  productos.push({ id, nombre: '', cantidad: 0, precio: 0, vendidos: 0, insumosUsados: [] });
+  renderProductos();
+}
+
+function renderProductos() {
+  const grid = document.getElementById('prod-grid');
+  grid.innerHTML = '';
+  if (productos.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="emoji">🎀</div><div>Hacé clic en "Agregar producto" para empezar.</div></div>';
+    return;
+  }
+  productos.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'prod-card';
+    div.innerHTML = `
+      <div class="prod-card-header">
+        <input type="text" placeholder="Nombre del producto" value="${p.nombre}"
+          oninput="updateProducto(${p.id}, 'nombre', this.value)" />
+        <button class="btn-eliminar" onclick="eliminarProducto(${p.id})">✕</button>
+      </div>
+      <div class="prod-card-fields">
+        <div class="mini-field">
+          <label>Cantidad</label>
+          <input type="number" placeholder="0" min="0" value="${p.cantidad || ''}"
+            oninput="updateProducto(${p.id}, 'cantidad', this.value)" />
+        </div>
+        <div class="mini-field">
+          <label>Precio de venta ($)</label>
+          <input type="number" placeholder="0.00" min="0" step="0.01" value="${p.precio || ''}"
+            oninput="updateProducto(${p.id}, 'precio', this.value)" />
+        </div>
+      </div>
+
+      <div class="insumos-usados" id="insumos-usados-${p.id}">
+        ${renderInsumosUsadosHTML(p)}
+      </div>
+
+      <div class="precio-sugerido" id="sug-${p.id}">
+        <span>✨ Precio sugerido (por unidad)</span>
+        <strong>$${calcularSugerido(p).toFixed(2)}</strong>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+function renderInsumosUsadosHTML(p) {
+  let optionsHTML = '<option value="">Elegí un insumo...</option>';
+  insumos.forEach(ins => {
+    optionsHTML += `<option value="${ins.id}">${ins.producto || '(sin nombre)'}</option>`;
+  });
+
+  let rowsHTML = '';
+  if (p.insumosUsados.length === 0) {
+    rowsHTML = '<div class="sin-insumos-msg">Todavía no asignaste insumos a este producto.</div>';
+  } else {
+    p.insumosUsados.forEach((uso, idx) => {
+      let opts = optionsHTML;
+      // marcar seleccionado
+      opts = opts.replace(`value="${uso.insumoId}"`, `value="${uso.insumoId}" selected`);
+      rowsHTML += `
+        <div class="insumo-uso-row">
+          <select onchange="updateInsumoUso(${p.id}, ${idx}, 'insumoId', this.value)">
+            ${opts}
+          </select>
+          <input type="number" min="0" step="0.01" placeholder="Cant." value="${uso.cantidadUsada || ''}"
+            onchange="updateInsumoUso(${p.id}, ${idx}, 'cantidadUsada', this.value)" />
+          <button class="btn-quitar-uso" onclick="quitarInsumoUso(${p.id}, ${idx})">✕</button>
+        </div>`;
+    });
+  }
+
+  const costoInsumos = calcularCostoInsumosProducto(p);
+
+  return `
+    <div class="insumos-usados-header">
+      <span>🧾 Insumos utilizados (por unidad)</span>
+      <button class="btn-add-insumo-uso" onclick="agregarInsumoUso(${p.id})">＋ insumo</button>
+    </div>
+    ${rowsHTML}
+    <div class="costo-insumos-linea">
+      <span>Costo de insumos por unidad:</span>
+      <strong>$${costoInsumos.toFixed(2)}</strong>
+    </div>`;
+}
+
+function agregarInsumoUso(productoId) {
+  const p = productos.find(x => x.id === productoId);
+  if (!p) return;
+  if (insumos.length === 0) {
+    mostrarToast('Primero agregá insumos en la lista de arriba 🛒');
+    return;
+  }
+  p.insumosUsados.push({ insumoId: insumos[0].id, cantidadUsada: 0 });
+  refrescarTarjetaProducto(p);
+}
+
+function updateInsumoUso(productoId, idx, campo, valor) {
+  const p = productos.find(x => x.id === productoId);
+  if (!p) return;
+  const uso = p.insumosUsados[idx];
+  if (!uso) return;
+  uso[campo] = campo === 'insumoId' ? parseInt(valor) : (parseFloat(valor) || 0);
+  refrescarTarjetaProducto(p);
+}
+
+function quitarInsumoUso(productoId, idx) {
+  const p = productos.find(x => x.id === productoId);
+  if (!p) return;
+  p.insumosUsados.splice(idx, 1);
+  refrescarTarjetaProducto(p);
+}
+
+function refrescarTarjetaProducto(p) {
+  const cont = document.getElementById(`insumos-usados-${p.id}`);
+  if (cont) cont.innerHTML = renderInsumosUsadosHTML(p);
+  const sugEl = document.getElementById(`sug-${p.id}`);
+  if (sugEl) sugEl.querySelector('strong').textContent = `$${calcularSugerido(p).toFixed(2)}`;
+}
+
+function updateProducto(id, campo, valor) {
+  const p = productos.find(x => x.id === id);
+  if (!p) return;
+  p[campo] = campo === 'nombre' ? valor : parseFloat(valor) || 0;
+  const sugEl = document.getElementById(`sug-${id}`);
+  if (sugEl) sugEl.querySelector('strong').textContent = `$${calcularSugerido(p).toFixed(2)}`;
+}
+
+function eliminarProducto(id) {
+  productos = productos.filter(x => x.id !== id);
+  renderProductos();
+}
+
+// Costo de insumos por UNIDAD de un producto, según lo que realmente usa
+function calcularCostoInsumosProducto(prod) {
+  let costo = 0;
+  prod.insumosUsados.forEach(uso => {
+    const ins = insumos.find(i => i.id === uso.insumoId);
+    if (ins) costo += (ins.precioUnit || 0) * (uso.cantidadUsada || 0);
+  });
+  return costo;
+}
+
+// Reparte la mano de obra total entre los productos en proporción
+// al costo de insumos que cada uno consume (por unidad x cantidad producida).
+// Si nadie tiene insumos asignados todavía, reparte por cantidad de unidades.
+function getManoObraPorUnidad(prod) {
+  const manoObraTotal = getManoObra();
+  if (manoObraTotal === 0) return 0;
+
+  const costosTotalesPorProducto = productos.map(p => ({
+    id: p.id,
+    costoTotal: calcularCostoInsumosProducto(p) * (p.cantidad || 0)
+  }));
+  const sumaCostos = costosTotalesPorProducto.reduce((s, c) => s + c.costoTotal, 0);
+
+  if (sumaCostos > 0) {
+    const propio = costosTotalesPorProducto.find(c => c.id === prod.id);
+    const proporcion = propio.costoTotal / sumaCostos;
+    const moTotalProd = manoObraTotal * proporcion;
+    return prod.cantidad > 0 ? moTotalProd / prod.cantidad : 0;
+  }
+
+  // fallback: repartir por unidades si no hay insumos asignados aún
+  const totalUnidades = productos.reduce((s, p) => s + (p.cantidad || 0), 0);
+  if (totalUnidades === 0) return 0;
+  return manoObraTotal / totalUnidades;
+}
+
+function calcularSugerido(prod) {
+  const costoInsumos = calcularCostoInsumosProducto(prod);
+  const moPorUnidad = getManoObraPorUnidad(prod);
+  const costoTotalUnidad = costoInsumos + moPorUnidad;
+  const pct = parseFloat(document.getElementById('ganancia-pct').value) || 0;
+  return costoTotalUnidad * (1 + pct / 100);
+}
+
+function actualizarSugeridos() {
+  productos.forEach(p => {
+    const el = document.getElementById(`sug-${p.id}`);
+    if (el) el.querySelector('strong').textContent = `$${calcularSugerido(p).toFixed(2)}`;
+    const costoEl = document.querySelector(`#insumos-usados-${p.id} .costo-insumos-linea strong`);
+    if (costoEl) costoEl.textContent = `$${calcularCostoInsumosProducto(p).toFixed(2)}`;
+  });
+}
+
+// ============================================================
+//  RESUMEN
+// ============================================================
+function renderResumen() {
+  const totalInversion = getInversionTotal();
+  const totalProd = productos.reduce((s, p) => s + p.cantidad, 0);
+  const totalVendidos = productos.reduce((s, p) => s + p.vendidos, 0);
+  const totalStock = totalProd - totalVendidos;
+
+  // costo real por unidad de cada producto (insumos específicos + MO proporcional)
+  function costoRealUnidad(p) {
+    return calcularCostoInsumosProducto(p) + getManoObraPorUnidad(p);
+  }
+
+  // ganancia manual (con el precio que cada uno puso a mano)
+  let ingresoManual = 0;
+  let costoVendidoManual = 0;
+  productos.forEach(p => {
+    ingresoManual += p.vendidos * p.precio;
+    costoVendidoManual += p.vendidos * costoRealUnidad(p);
+  });
+  const gananciaMnl = ingresoManual - costoVendidoManual;
+
+  // ganancia sugerida (si vendiera todo al precio sugerido)
+  let ingresoSug = 0;
+  let costoVendidoSug = 0;
+  productos.forEach(p => {
+    const sug = calcularSugerido(p);
+    ingresoSug += p.vendidos * sug;
+    costoVendidoSug += p.vendidos * costoRealUnidad(p);
+  });
+  const gananciaS = ingresoSug - costoVendidoSug;
+
+  // Stats cards
+  const statsEl = document.getElementById('resumen-stats');
+  statsEl.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon">💸</div>
+      <div class="stat-label">Inversión total</div>
+      <div class="stat-val">$${totalInversion.toFixed(2)}</div>
+    </div>
+    <div class="stat-card rosa">
+      <div class="stat-icon">🎀</div>
+      <div class="stat-label">Productos en stock</div>
+      <div class="stat-val">${totalStock}</div>
+    </div>
+    <div class="stat-card rosa">
+      <div class="stat-icon">📦</div>
+      <div class="stat-label">Productos distintos</div>
+      <div class="stat-val">${productos.length}</div>
+    </div>
+    <div class="stat-card amarillo">
+      <div class="stat-icon">🛒</div>
+      <div class="stat-label">Vendidos</div>
+      <div class="stat-val">${totalVendidos}</div>
+    </div>`;
+
+  // Ganancia breakdown
+  document.getElementById('ganancia-manual').textContent = `$${Math.max(0, gananciaMnl).toFixed(2)}`;
+  document.getElementById('ganancia-manual-sub').textContent =
+    ingresoManual > 0
+      ? `Ingresos: $${ingresoManual.toFixed(2)} · ${totalVendidos} unidades vendidas`
+      : 'Todavía no registraste ventas';
+
+  document.getElementById('ganancia-sugerida').textContent = `$${Math.max(0, gananciaS).toFixed(2)}`;
+  const pct = parseFloat(document.getElementById('ganancia-pct').value) || 0;
+  document.getElementById('ganancia-sugerida-sub').textContent =
+    `Con ${pct}% de ganancia · ${totalVendidos} unidades vendidas`;
+
+  // Stock table
+  const stockBody = document.getElementById('stock-body');
+  const emptyEl = document.getElementById('stock-empty');
+
+  if (productos.length === 0) {
+    stockBody.innerHTML = '';
+    emptyEl.style.display = 'block';
+    return;
+  }
+  emptyEl.style.display = 'none';
+
+  stockBody.innerHTML = '';
+  productos.forEach(p => {
+    const stock = p.cantidad - p.vendidos;
+    const sug = calcularSugerido(p);
+    let badge = '';
+    if (stock > 3) badge = '<span class="badge-stock ok">Disponible</span>';
+    else if (stock > 0) badge = '<span class="badge-stock low">Poco stock</span>';
+    else badge = '<span class="badge-stock out">Sin stock</span>';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${p.nombre || '<span style="color:#8a8a92;">Sin nombre</span>'}</td>
+      <td>${stock}</td>
+      <td>${p.vendidos}</td>
+      <td style="color: var(--rosa-suave);">$${p.precio > 0 ? p.precio.toFixed(2) : '—'}</td>
+      <td style="color: var(--verde-ganancia);">$${sug > 0 ? sug.toFixed(2) : '—'}</td>
+      <td>${badge}</td>
+      <td>
+        <button class="btn-vender" onclick="registrarVenta(${p.id})" ${stock <= 0 ? 'disabled' : ''}>
+          Registrar venta
+        </button>
+      </td>`;
+    stockBody.appendChild(tr);
+  });
+}
+
+function registrarVenta(id) {
+  const p = productos.find(x => x.id === id);
+  if (!p) return;
+  if (p.vendidos >= p.cantidad) return;
+  p.vendidos++;
+  renderResumen();
+  mostrarToast(`¡Venta registrada de "${p.nombre || 'producto'}"! 🎉`);
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.display = 'none'; }, 2800);
+}
+
+// ============================================================
+//  INIT con datos de ejemplo
+// ============================================================
+window.addEventListener('load', () => {
+  // insumo de ejemplo
+  insumoCnt = 0;
+  insumos = [];
+  agregarInsumo();
+  // pequeño timeout para que el DOM esté listo
+  setTimeout(() => {
+    const row = document.querySelector('#insumos-body tr');
+    if (row) {
+      const inputs = row.querySelectorAll('input');
+      inputs[0].value = 'Hilo de coser';
+      inputs[1].value = '10';
+      inputs[2].value = '50';
+      updateInsumo(1, 'producto', 'Hilo de coser');
+      updateInsumo(1, 'cantidad', 10);
+      updateInsumo(1, 'precioUnit', 50);
+    }
+  }, 50);
+});
+</script>
+</body>
+</html>
